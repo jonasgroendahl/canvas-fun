@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div style="background-color:black">
+        <img src="img.png" id="img" height="40" width="80" />
+    </div>
+    <div>Create a canvas document.createElement Get the 2d context canvas.getContext('2d') Draw the image to the canvas context.drawImage(image,
+        x, y) Make sure the image is from the same domain or you won't have access to its pixels Get the pixel data for the
+        image context.getImageData(x1, y1, x2, y2) You want just the top left so context.getImageData(0, 0, 1, 1) The result
+        of getImageData will have an array of pixels in it's data field (context.getImageData(0,0,1,1).data) The array will
+        have r, g, b and a values.
+    </div>
+    <script>
+        const newImg = new Image();
+        newImg.src = "img.png";
+        newImg.onload = () => {
+            const c = document.createElement("canvas");
+            c.width = newImg.width;
+            c.height = newImg.height;
+            // console.log(c.width);
+            const context = c.getContext("2d");
+            console.log("context", context);
+            const image = context.drawImage(newImg, 0, 0, c.width, c.height);
+            //document.body.appendChild(c);
+            console.log("image", image);
+            const data = context.getImageData(0, 0, c.width, c.height).data;
+            for (let i = 0; i < data.length; i = i + 4) {
+                console.log(`rgba(${data[i]},${data[i] + 1},${data[i] + 2},${(data[i] + 3) / 255})`);
+            }
+            console.log("data", data);
+            document.body.appendChild(c);
+        }
+
+        document.addEventListener("DOMContentLoaded", function (event) {
+            console.log("DOMcontetloaded");
+        });
+
+        window.addEventListener("load", function (event) {
+            console.log("window loaded");
+            const s = document.querySelector("#img");
+            const c = document.createElement("canvas");
+            c.width = s.width;
+            c.height = s.height;
+            console.log(c.width);
+            const context = c.getContext("2d");
+            console.log("context", context);
+            const image = context.drawImage(s, 0, 0, c.width, c.height);
+            //document.body.appendChild(c);
+            console.log("image", image);
+            const data = context.getImageData(0, 0, c.width, c.height);
+            console.log("data", data);
+            document.body.appendChild(c);
+        })
+
+    </script>
+</body>
+
+</html>
