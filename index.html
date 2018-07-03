@@ -10,7 +10,7 @@
 
 <body>
     <div style="background-color:black">
-        <img src="img.png" id="img" height="40" width="80" />
+        <img src="img.png" id="img" />
     </div>
     <div>Create a canvas document.createElement Get the 2d context canvas.getContext('2d') Draw the image to the canvas context.drawImage(image,
         x, y) Make sure the image is from the same domain or you won't have access to its pixels Get the pixel data for the
@@ -32,16 +32,35 @@
             //document.body.appendChild(c);
             console.log("image", image);
             const data = context.getImageData(0, 0, c.width, c.height).data;
-            for (let i = 0; i < data.length; i = i + 4) {
-                console.log(`rgba(${data[i]},${data[i] + 1},${data[i] + 2},${(data[i] + 3) / 255})`);
-            }
             console.log("data", data);
-            document.body.appendChild(c);
+            document.querySelector("#img").addEventListener("click", function (e) {
+                console.log(e);
+                console.log(this.offsetLeft);
+                console.log("x", e.clientX - this.offsetLeft);
+                console.log("y", e.clientY - this.offsetTop);
+                const color = context.getImageData(e.clientX - this.offsetLeft, e.clientY - this.offsetTop, 1, 1).data;
+                console.log("color", color, color[0]);
+                const colorRefactor = [color[0], color[1], color[2], color[3]];
+                const coords = [];
+                console.log("cRefactor", colorRefactor);
+                for (let i = 0; i < data.length; i = i + 4) {
+                    const arr = [data[i], data[i + 1], data[i + 2], data[i + 3]];
+                    if (JSON.stringify(arr) == JSON.stringify(colorRefactor)) {
+                        coords.push(i);
+                    }
+
+                }
+                console.log("coords", coords);
+
+
+            });
         }
 
         document.addEventListener("DOMContentLoaded", function (event) {
             console.log("DOMcontetloaded");
         });
+
+        /*
 
         window.addEventListener("load", function (event) {
             console.log("window loaded");
@@ -58,7 +77,11 @@
             const data = context.getImageData(0, 0, c.width, c.height);
             console.log("data", data);
             document.body.appendChild(c);
-        })
+        });^
+
+        */
+
+
 
     </script>
 </body>
